@@ -7,4 +7,5 @@ public class Doctor
     public Department? Department { get; set; }
     public string DoctorName { get; set; } = string.Empty;
     public string Specialization { get; set; } = string.Empty;
+    public ICollection<Consultation> Consultations { get; set; } = new List<Consultation>();
 }

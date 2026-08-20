@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TumainiClinic.Api.Data;
 
@@ -11,9 +12,11 @@ using TumainiClinic.Api.Data;
 namespace TumainiClinic.Api.Migrations
 {
     [DbContext(typeof(ClinicDbContext))]
-    partial class ClinicDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260819113735_AddMedicationPrescription")]
+    partial class AddMedicationPrescription
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,40 +24,6 @@ namespace TumainiClinic.Api.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("TumainiClinic.Api.Models.Bill", b =>
-                {
-                    b.Property<int>("BillId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BillId"));
-
-                    b.Property<DateTime>("BillingDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("ConsultationCharge")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("LabTestCharge")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("MedicationCharge")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("VisitId")
-                        .HasColumnType("int");
-
-                    b.HasKey("BillId");
-
-                    b.HasIndex("VisitId")
-                        .IsUnique();
-
-                    b.ToTable("Bills");
-                });
 
             modelBuilder.Entity("TumainiClinic.Api.Models.Consultation", b =>
                 {
@@ -193,35 +162,6 @@ namespace TumainiClinic.Api.Migrations
                     b.ToTable("Patients");
                 });
 
-            modelBuilder.Entity("TumainiClinic.Api.Models.Payment", b =>
-                {
-                    b.Property<int>("PaymentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"));
-
-                    b.Property<decimal>("AmountPaid")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("BillId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("PaymentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PaymentMethod")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("PaymentId");
-
-                    b.HasIndex("BillId")
-                        .IsUnique();
-
-                    b.ToTable("Payments");
-                });
-
             modelBuilder.Entity("TumainiClinic.Api.Models.Prescription", b =>
                 {
                     b.Property<int>("PrescriptionId")
@@ -344,17 +284,6 @@ namespace TumainiClinic.Api.Migrations
                     b.ToTable("Visits");
                 });
 
-            modelBuilder.Entity("TumainiClinic.Api.Models.Bill", b =>
-                {
-                    b.HasOne("TumainiClinic.Api.Models.Visit", "Visit")
-                        .WithOne("Bill")
-                        .HasForeignKey("TumainiClinic.Api.Models.Bill", "VisitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Visit");
-                });
-
             modelBuilder.Entity("TumainiClinic.Api.Models.Consultation", b =>
                 {
                     b.HasOne("TumainiClinic.Api.Models.Doctor", "Doctor")
@@ -383,17 +312,6 @@ namespace TumainiClinic.Api.Migrations
                         .IsRequired();
 
                     b.Navigation("Department");
-                });
-
-            modelBuilder.Entity("TumainiClinic.Api.Models.Payment", b =>
-                {
-                    b.HasOne("TumainiClinic.Api.Models.Bill", "Bill")
-                        .WithOne("Payment")
-                        .HasForeignKey("TumainiClinic.Api.Models.Payment", "BillId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Bill");
                 });
 
             modelBuilder.Entity("TumainiClinic.Api.Models.Prescription", b =>
@@ -456,11 +374,6 @@ namespace TumainiClinic.Api.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("TumainiClinic.Api.Models.Bill", b =>
-                {
-                    b.Navigation("Payment");
-                });
-
             modelBuilder.Entity("TumainiClinic.Api.Models.Consultation", b =>
                 {
                     b.Navigation("Prescription");
@@ -495,8 +408,6 @@ namespace TumainiClinic.Api.Migrations
 
             modelBuilder.Entity("TumainiClinic.Api.Models.Visit", b =>
                 {
-                    b.Navigation("Bill");
-
                     b.Navigation("Consultation");
 
                     b.Navigation("Triage");
